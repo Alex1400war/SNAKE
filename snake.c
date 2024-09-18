@@ -1,4 +1,5 @@
 #include <unistd.h>
+#include <stdlib.h>
 
 typedef struct snake
 {
@@ -14,7 +15,11 @@ char	**Mboard()
 	struct snake snake;
 	int	x;
 	int	y;
-	char	map[6][6];
+	char	**map;
+
+	map = (char **)malloc(6 * sizeof(char *));
+	for (int i = 0; i < 6; i++)
+		map[i] = (char *)malloc(6 * sizeof(char));
 
 	snake.head = 's';
 	snake.body = 'x';
@@ -46,14 +51,15 @@ void	print_board(char **board)
 
 	x = 0;
 	y = 0;
-	while (board[y][x])
+	while (y < 6)
 	{
 		x = 0;
-		while (board[y][x])
+		while (x < 6)
 		{
 			write(1, &board[y][x], 1);
 			x++;
 		}
+		write(1, "\n", 1);
 		y++;
 	}
 } 	
@@ -84,7 +90,14 @@ int	Snake_Size()
 int	main()
 {
 	char **board;
+	int	i;
 
 	board = Mboard();
 	print_board(board);
+
+	for (i = 0; i < 6; i++)
+		free(board[i]);
+	free(board);
+
+	return 0;
 }
